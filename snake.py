@@ -9,13 +9,13 @@ class Snake:
     bored = [[0 for i in range(40)] for i in range(20)]
     bored[poslist[0][0]][poslist[0][1]] = 1
     apple = [0,0]
+
     def __init__(self):
         self.newApple()
         self.poslist[0][0] = random.randint(0,19)
         self.poslist[0][1] = random.randint(0, 39)
-    def draw(self):
-        print(self.direction)
-        print(self.poslist)
+
+    def draw(self, screen):
         if self.direction == 'Left':
             self.poslist.insert(0, [self.poslist[0][0], self.poslist[0][1]-1])
         elif self.direction == 'Right':
@@ -27,13 +27,14 @@ class Snake:
         else:
             self.poslist.insert(0, [self.poslist[0][0], self.poslist[0][1]])
 
-        if self.poslist[0][1] < 0 or self.poslist[0][0] < 0 or self.poslist[0][0]  > 19 or self.poslist[0][1]  > 39:
-            quit()
+        if self.poslist[0][1] < 0 or self.poslist[0][0] < 0 or self.poslist[0][0]  > 19 or self.poslist[0][1] > 39:
+            self.gameEnd(screen)
 
         if self.bored[self.poslist[0][0]][self.poslist[0][1]] == 2:
             self.newApple()
+            self.points += 100
         elif self.bored[self.poslist[0][0]][self.poslist[0][1]] == 1 and len(self.poslist) > 2:
-            quit()
+            self.gameEnd(screen)
         else:
             del (self.poslist[-1])
 
@@ -50,6 +51,15 @@ class Snake:
             if self.bored[self.apple[0]][self.apple[1]] != 1:
                 break
 
+    def gameEnd(self, screen):
+        while True:
+            screen.blit(wordfont.render("Score: {0}".format(self.points), 200, (255, 255, 255)), (150, 150))
+            pygame.display.update()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT or event.type == pygame.KEYDOWN:
+                    quit()
+
+
 def drawbored(screen, bored):
     for i, list in enumerate(bored):
         for ii, value in enumerate(list):
@@ -62,9 +72,11 @@ def drawbored(screen, bored):
 
 
 pygame.init()
-
+pygame.font.init()
+wordfont = pygame.font.SysFont("sans",40)
 player1 = Snake()
 screen = pygame.display.set_mode((30 * len(player1.bored[0]), (30 * len(player1.bored))))
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -78,7 +90,7 @@ while True:
                 player1.direction = "Down"
             elif event.key == pygame.K_RIGHT and player1.direction != "Left":
                 player1.direction = "Right"
-    player1.draw()
+    player1.draw(screen)
     pygame.display.update()
     time.sleep(0.03)
 
