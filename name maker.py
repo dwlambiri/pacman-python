@@ -1,14 +1,14 @@
 
-def gameEnd(self, screen):
+def nameMaker(screen, font):
     nameAsciiValue = [65,65,65]#sets defaulf ascii to 'A'
     nameAsciiIndex = 0
-    screen.blit(wordfont.render("Name:", 200, (255, 255, 255)), (600, 150))
-    screen.blit(wordfont.render("Score: {0}".format(self.points), 200, (255, 255, 255)), (150, 150))
+    screen.blit(font.render("Name:", 200, (255, 255, 255)), (600, 150))
+    screen.blit(font.render("Score: {0}".format(self.points), 200, (255, 255, 255)), (150, 150))
     while True:
         pygame.display.update()
         rectangl = (700+nameAsciiIndex*20, 150, 25, 25)
         pygame.draw.rect(screen, (0,0,0), rectangl)
-        screen.blit(wordfont.render("{0}".format(chr(nameAsciiValue[nameAsciiIndex])), 200, (255, 255, 255)), (700+nameAsciiIndex*20, 150))
+        screen.blit(font.render("{0}".format(chr(nameAsciiValue[nameAsciiIndex])), 200, (255, 255, 255)), (700+nameAsciiIndex*20, 150))
         print(nameAsciiValue)
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
