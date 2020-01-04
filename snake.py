@@ -73,7 +73,7 @@ def drawbored(screen, bored):
 def displayHS(screen, font):
     while True:
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT or event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                 quit()
         printHS(screen, font)
         pygame.display.update()
@@ -104,12 +104,12 @@ def game(player1, screen):
 def nameMaker(screen, font):
     nameAsciiValue = [65,65,65]#sets defaulf ascii to 'A'
     nameAsciiIndex = 0
-    screen.blit(font.render("Name:", 200, (255, 255, 255)), (600, 150))
+    #screen.blit(font.render("Name:", 200, (255, 255, 255)), (450, 0))
     while True:
         pygame.display.update()
-        rectangl = (700+nameAsciiIndex*20, 150, 25, 25)
+        rectangl = (200+nameAsciiIndex*300, 150, 400, 400)
         pygame.draw.rect(screen, (0,0,0), rectangl)
-        screen.blit(font.render("{0}".format(chr(nameAsciiValue[nameAsciiIndex])), 200, (255, 255, 255)), (700+nameAsciiIndex*20, 150))
+        screen.blit(font.render("{0}".format(chr(nameAsciiValue[nameAsciiIndex])), 200, (255, 255, 255)), (200+nameAsciiIndex*300, 150))
         print(nameAsciiValue)
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
@@ -124,7 +124,7 @@ def nameMaker(screen, font):
                 elif event.key == pygame.K_RETURN and nameAsciiIndex == 2:
                     playerName = ''.join(chr(x) for x in nameAsciiValue)
                     print(playerName)
-                    quit() #REMEMBER TO REMOVE QUIT
+                    #quit() #REMEMBER TO REMOVE QUIT
                     return playerName
             elif event.type == pygame.QUIT:
                 quit()
@@ -134,11 +134,17 @@ pygame.font.init()
 font = pygame.font.SysFont("sans",40)
 player1 = Snake()
 screen = pygame.display.set_mode((30 * len(player1.bored[0]), (30 * len(player1.bored))))
-#insertScore(game(player1, screen), "Justin")
 
-#player1.bored = [[0 for i in range(40)] for i in range(20)]
-#drawbored(screen, player1.bored)
+score = game(player1, screen)
 
-nameMaker(screen, pygame.font.SysFont("sans",40))
-#displayHS(screen, font)
+player1.bored = [[0 for i in range(40)] for i in range(20)]
+drawbored(screen, player1.bored)
+
+name = nameMaker(screen, pygame.font.SysFont("sans",400))
+insertScore(score, name)
+
+player1.bored = [[0 for i in range(40)] for i in range(20)]
+drawbored(screen, player1.bored)
+
+displayHS(screen, font)
 
